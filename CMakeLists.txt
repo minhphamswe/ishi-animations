@@ -47,12 +47,12 @@ set(SOURCE_FILES
     src/joint.h
     src/joint_info.h
     src/loader.h
-    src/main.cpp
     src/mat.h
     src/types.h
     src/vec.h)
 
 add_executable(ishi_animations
+    src/main.cpp
     ${SOURCE_FILES}
     ${BISON_MyParser_OUTPUTS}
     ${FLEX_MyScanner_OUTPUTS})
@@ -63,8 +63,33 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR})
 # required libraries
 find_package(OpenGL REQUIRED)
 include_directories(${OPENGL_INCLUDE_DIRS})
-target_link_libraries(ishi_animations ${OPENGL_LIBRARIES})
 
 find_package(GLUT REQUIRED)
 include_directories(${GLUT_INCLUDE_DIR})
-target_link_libraries(ishi_animations ${GLUT_LIBRARIES})
+
+set(MAIN_LIBRARIES
+    ${OPENGL_LIBRARIES}
+    ${GLUT_LIBRARIES})
+
+target_link_libraries(ishi_animations ${MAIN_LIBRARIES})
+
+# Build test
+include_directories(lib)
+set(TEST_FILES
+    test/matrix_test.cpp
+    test/point_test.cpp
+    test/point_vector_test.cpp
+    test/transform_point_test.cpp
+    test/transform_test.cpp
+    test/transform_vector_test.cpp
+    test/vector_test.cpp)
+
+add_executable(ishi_animations_test
+    test/main.cpp
+    ${SOURCE_FILES}
+    ${TEST_FILES})
+
+target_link_libraries(ishi_animations_test ${MAIN_LIBRARIES})
+
+enable_testing()
+add_test(MyTest ishi_animations_test)

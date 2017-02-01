@@ -1,0 +1,249 @@
+#include <catch/catch.hpp>
+
+#include <core/vector.h>
+
+using namespace ishi;
+
+TEST_CASE("VectorConstructor", "[vector]") {
+  Vector v;
+  // Default constructor returns origin
+  v = Vector();
+  CHECK(v.x == 0);
+  CHECK(v.y == 0);
+  CHECK(v.z ==  0);
+
+  // Two arg constructor returns point on 0-plane
+  for (float fx = -1.0f; fx < 1.0f; fx += 0.1f) {
+    for (float fy = -1.0f; fy < 1.0f; fy += 0.1f) {
+      v = Vector(fx, fy);
+      CHECK(v.x == fx);
+      CHECK(v.y == fy);
+      CHECK(v.z == 0);
+    }
+  }
+
+  // Three arg constructor returns point in 3D space
+  for (float fx = -1.0f; fx < 1.0f; fx += 0.1f) {
+    for (float fy = -1.0f; fy < 1.0f; fy += 0.1f) {
+      for (float fz = -1.0f; fz < 1.0f; fz += 0.1f) {
+        v = Vector(fx, fy, fz);
+        CHECK(v.x == fx);
+        CHECK(v.y == fy);
+        CHECK(v.z == fz);
+      }
+    }
+  }
+}
+
+TEST_CASE("VectorUnaryMinus", "[vector]") {
+  Vector v;
+
+  v = Vector(1, 0, 0);
+  CHECK((-v).x == -1);
+  CHECK((-v).y == 0);
+  CHECK((-v).z == 0);
+
+  v = -Vector(1, 2, 3);
+  CHECK(v.x == -1);
+  CHECK(v.y == -2);
+  CHECK(v.z == -3);
+}
+
+TEST_CASE("VectorEquality", "[vector]") {
+  Vector v;
+
+  v = Vector(1, 0, 0);
+  CHECK(v == v);
+  CHECK(v == Vector(1, 0, 0));
+  CHECK(Vector(1, 0, 0) == Vector(1, 0, 0));
+
+  v = Vector(4, 5, 6);
+  CHECK(v == v);
+  CHECK(v == Vector(4, 5, 6));
+  CHECK(Vector(4, 5, 6) == Vector(4, 5, 6));
+}
+
+TEST_CASE("VectorIndexAccessor", "[vector]") {
+  Vector v;
+  v = Vector(5, 6);
+  CHECK(v[0] == 5);
+  CHECK(v[1] == 6);
+  CHECK(v[2] == 0);
+
+  v = Vector(1, 2, 3);
+  CHECK(v[0] == 1);
+  CHECK(v[1] == 2);
+  CHECK(v[2] == 3);
+}
+
+TEST_CASE("VectorMultiplication", "[vector]") {
+  Vector v;
+
+  v = Vector(1, 2, 3) * 5;
+  CHECK(v == Vector(5, 10, 15));
+
+  v = 5 * Vector(1, 2, 3);
+  CHECK(v == Vector(5, 10, 15));
+
+  v = Vector(1, 2, 3);
+  v *= 5;
+  CHECK(v == Vector(5, 10, 15));
+}
+
+TEST_CASE("VectorVectorAddition", "[vector]") {
+  Vector v1, v2, v;
+
+  v1 = Vector(1, 2, 3);
+  v2 = Vector(4, 5, 6);
+
+  // Check addition identity
+  v = v1 + Vector(0, 0, 0);
+  CHECK(v == Vector(1, 2, 3));
+
+  v = v2 + Vector(0, 0, 0);
+  CHECK(v == Vector(4, 5, 6));
+
+  // Check result of addition
+  v = v1 + v2;
+  CHECK(v == Vector(5, 7, 9));
+
+  // Check addition is commutative
+  CHECK((v1 + v2) == (v2 + v1));
+}
+
+TEST_CASE("VectorVectorIncrement", "[vector]") {
+  Vector v1, v2, v;
+
+  v1 = Vector(1, 2, 3);
+  v2 = Vector(4, 5, 6);
+
+  // Check result of increment
+  v = v1;
+  v += v2;
+  CHECK(v == Vector(5, 7, 9));
+
+  // Check result of increment
+  v = v2;
+  v += v1;
+  CHECK(v == Vector(5, 7, 9));
+}
+
+TEST_CASE("VectorVectorSubtration", "[vector]") {
+  Vector v1, v2, v;
+
+  v1 = Vector(1, 2, 3);
+  v2 = Vector(4, 5, 6);
+
+  // Check subtraction identity
+  v = v1 - Vector(0, 0, 0);
+  CHECK(v == Vector(1, 2, 3));
+
+  v = v2 - Vector(0, 0, 0);
+  CHECK(v == Vector(4, 5, 6));
+
+  // Check result of subtraction
+  v = v2 - v1;
+  CHECK(v == Vector(3, 3, 3));
+
+  v = v1 - v2;
+  CHECK(v == Vector(-3, -3, -3));
+
+  // Check result of decrement
+  v -= v2;
+  CHECK(v == Vector(-7, -8, -9));
+
+  // Check addition is anticommutative
+  CHECK((v1 - v2) == -(v2 - v1));
+}
+
+TEST_CASE("DotProduct", "[vector]") {
+  Vector v1, v2;
+
+  // Check "2D" Vector
+  v1 = Vector(1, 0);
+  v2 = Vector(0, 5);
+  CHECK(Dot(v1, v2) == 0);  // orthogonal
+  CHECK(Dot(v1, v2) == Dot(v2, v1));  // commutative
+
+  v1 = Vector(1, 2);
+  v2 = Vector(4, 5);
+  CHECK(Dot(v1, v2) == 14);
+  CHECK(Dot(v1, v2) == Dot(v2, v1));  // commutative
+
+  // Check "3D" Vector
+  v1 = Vector(1, 0, 0);
+  v2 = Vector(0, 5, 0);
+  CHECK(Dot(v1, v2) == 0);  // orthogonal
+  CHECK(Dot(v1, v2) == Dot(v2, v1));  // commutative
+
+  v1 = Vector(0, 0, 3);
+  v2 = Vector(0, 5, 0);
+  CHECK(Dot(v1, v2) == 0);  // orthogonal
+  CHECK(Dot(v1, v2) == Dot(v2, v1));  // commutative
+
+  v1 = Vector(1, 0, 0);
+  v2 = Vector(0, 0, 6);
+  CHECK(Dot(v1, v2) == 0);  // orthogonal
+  CHECK(Dot(v1, v2) == Dot(v2, v1));  // commutative
+
+  v1 = Vector(1, 2, 3);
+  v2 = Vector(4, 5, 6);
+  CHECK(Dot(v1, v2) == 32);
+  CHECK(Dot(v1, v2) == Dot(v2, v1));  // commutative
+}
+
+TEST_CASE("CrossProduct", "[vector]") {
+  Vector v1, v2;
+
+  // Check (i x j == k), (j x i == -k)
+  v1 = Vector(1, 0, 0);
+  v2 = Vector(0, 1, 0);
+  CHECK(Cross(v1, v2) == Vector(0, 0, 1));
+  CHECK(Cross(v1, v2) == -Cross(v2, v1));
+
+  // Check (j x k == i), (k x j == -i)
+  v1 = Vector(0, 1, 0);
+  v2 = Vector(0, 0, 1);
+  CHECK(Cross(v1, v2) == Vector(1, 0, 0));
+  CHECK(Cross(v1, v2) == -Cross(v2, v1));
+
+  // Check (k x i == j), (i x k == -j)
+  v1 = Vector(0, 0, 1);
+  v2 = Vector(1, 0, 0);
+  CHECK(Cross(v1, v2) == Vector(0, 1, 0));
+  CHECK(Cross(v1, v2) == -Cross(v2, v1));
+
+  v1 = Vector(1, 2, 3);
+  v2 = Vector(4, 5, 6);
+  CHECK(Cross(v1, v2) == Vector(-3, 6, -3));
+  CHECK(Cross(v1, v2) == -Cross(v2, v1));
+}
+
+/// Verify that the basis vectors generated by the CoordinateSystem call
+/// are pair-wise orthogonal.
+TEST_CASE("CoordinateSystemBasesOrthogonal", "[vector]") {
+  Vector v1 = Normalize(Vector(1, 2, 3));
+  Vector v2, v3;
+
+  CoordinateSystem(v1, &v2, &v3);
+  CHECK(Dot(v1, v2) == Approx(0).epsilon(0.001));
+  CHECK(Dot(v2, v3) == Approx(0).epsilon(0.001));
+  CHECK(Dot(v3, v1) == Approx(0).epsilon(0.001));
+
+  v1 = Vector(0, 1, 0);
+  CoordinateSystem(v1, &v2, &v3);
+  CHECK(Dot(v1, v2) == Approx(0).epsilon(0.001));
+  CHECK(Dot(v2, v3) == Approx(0).epsilon(0.001));
+  CHECK(Dot(v3, v1) == Approx(0).epsilon(0.001));
+}
+
+/// Verify that the basis vectors generated by the CoordinateSystem call
+/// all have unit length
+TEST_CASE("CoordinateSystemBasesUnitLength", "[vector]") {
+  Vector v1 = Normalize(Vector(1, 2, 3));
+  Vector v2, v3;
+
+  CoordinateSystem(v1, &v2, &v3);
+  CHECK(Length(v2) == Approx(1).epsilon(0.001));
+  CHECK(Length(v3) == Approx(1).epsilon(0.001));
+}
