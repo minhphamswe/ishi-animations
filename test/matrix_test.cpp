@@ -41,7 +41,7 @@ TEST_CASE("Matrix4x4ArrayConstructor", "[matrix]") {
 
   for (int i = 0; i < 4; ++i)
     for (int j = 0; j < 4; ++j)
-      CHECK(mat.m[i][j] == Approx(m[i][j]).epsilon(0.00));
+      CHECK(mat.m[i][j] == Approx(m[i][j]).epsilon(0.0001));
 }
 
 TEST_CASE("Matrix4x4FloatListConstructor", "[matrix]") {
@@ -60,7 +60,7 @@ TEST_CASE("Matrix4x4FloatListConstructor", "[matrix]") {
 
   for (int i = 0; i < 4; ++i)
     for (int j = 0; j < 4; ++j)
-      CHECK(mat.m[i][j] == Approx(m[i][j]).epsilon(0.00));
+      CHECK(mat.m[i][j] == Approx(m[i][j]).epsilon(0.0001));
 }
 
 TEST_CASE("Matrix4x4EqualityOperator", "[matrix]") {
@@ -170,7 +170,7 @@ TEST_CASE("Matrix4x4Inverse", "[matrix]") {
   const Matrix4x4 &inv1 = Inverse(m1);
   for (int x = 0; x < 4; ++x) {
     for (int y = 0; y < 4; ++y) {
-      CHECK(inv1.m[x][y] == Approx(i.m[x][y]).epsilon(0.00));
+      CHECK(inv1.m[x][y] == Approx(i.m[x][y]).epsilon(0.0001));
     }
   }
 
@@ -184,7 +184,7 @@ TEST_CASE("Matrix4x4Inverse", "[matrix]") {
   const Matrix4x4 &mul2 = Mul(m1, m2);
   for (int x = 0; x < 4; ++x) {
     for (int y = 0; y < 4; ++y) {
-      CHECK(mul2.m[x][y] == Approx(i.m[x][y]).epsilon(0.00));
+      CHECK(mul2.m[x][y] == Approx(i.m[x][y]).epsilon(0.0001));
     }
   }
 }
