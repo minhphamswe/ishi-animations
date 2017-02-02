@@ -8,12 +8,11 @@ void swap_row(float (*m)[4][8], int r1, int r2);
 void scale_row(float (*m)[4][8], int r, float f);
 void add_row(float (*m)[4][8], int from, int to, float f);
 
-
 struct Matrix4x4 {
- public:
+public:
   float m[4][4];
 
- public:
+public:
   /// Initialize an identity matrix
   Matrix4x4();
 

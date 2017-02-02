@@ -12,13 +12,15 @@ void swap_row(float (*m)[4][8], int r1, int r2) {
 }
 
 void scale_row(float (*m)[4][8], int r, float f) {
-  for (int j = 0; j < 8; j++)
+  for (int j = 0; j < 8; j++) {
     (*m)[r][j] = (*m)[r][j] * f;
+  }
 }
 
 void add_row(float (*m)[4][8], int from, int to, float f) {
-  for (int j = 0; j < 8; j++)
+  for (int j = 0; j < 8; j++) {
     (*m)[to][j] = (*m)[to][j] + (*m)[from][j] * f;
+  }
 }
 
 Matrix4x4::Matrix4x4() {
@@ -91,11 +93,13 @@ Matrix4x4::Matrix4x4(float a00, float a01, float a02, float a03,
 }
 
 bool Matrix4x4::operator==(const Matrix4x4 &mat) const {
-  int i, j;
-  for (i = 0; i < 4; i++)
-    for (j = 0; j < 4; j++)
-      if ((m[i][j] > mat.m[i][j] * 1.0001) || (m[i][j] < mat.m[i][j] * 0.9999))
+  for (int i = 0; i < 4; ++i) {
+    for (int j = 0; j < 4; ++j) {
+      if ((m[i][j] > mat.m[i][j] * 1.0001) || (m[i][j] < mat.m[i][j] * 0.9999)) {
         return false;
+      }
+    }
+  }
   return true;
 }
 
@@ -113,7 +117,7 @@ Matrix4x4 Inverse(const Matrix4x4 &mat) {
   for (int i = 0; i < 4; i++) {
     for (int j = 0; j < 4; j++) {
       matI[i][j] = mat.m[i][j];
-      matI[i][j+4] = I.m[i][j];
+      matI[i][j + 4] = I.m[i][j];
     }
   }
 
@@ -121,18 +125,21 @@ Matrix4x4 Inverse(const Matrix4x4 &mat) {
   // reduced row echelon form
   for (int i = 0; i < 4; i++) {
     // Make sure the ith value in the ith row is not 0
-    if (matI[i][i] == 0)
-      for (int k = i; k < 4; k++)
+    if (matI[i][i] == 0) {
+      for (int k = i; k < 4; k++) {
         if (matI[k][i] != 0) {
           swap_row(&matI, i, k);
           break;
         }
+      }
+    }
 
     // TODO: if matrix is singular, the next statement will divide by 0
 
     // Scale the ith row so the ith value is 1
-    if (matI[i][i] != 1)
-      scale_row(&matI, i, 1/matI[i][i]);
+    if (matI[i][i] != 1) {
+      scale_row(&matI, i, 1 / matI[i][i]);
+    }
 
     // Zero out the ith value in all the other rows
     for (int j = 0; j < 4; j++) {
@@ -156,14 +163,18 @@ Matrix4x4 Transpose(const Matrix4x4 &mat) {
                    mat.m[0][3], mat.m[1][3], mat.m[2][3], mat.m[3][3]);
 }
 
-Matrix4x4 Mul(const Matrix4x4& m1, const Matrix4x4& m2) {
+Matrix4x4 Mul(const Matrix4x4 &m1, const Matrix4x4 &m2) {
   Matrix4x4 r;
-  for (int i = 0; i < 4; i++)
-    for (int j = 0; j < 4; j++)
+
+  for (int i = 0; i < 4; ++i) {
+    for (int j = 0; j < 4; ++j) {
       r.m[i][j] = m1.m[i][0] * m2.m[0][j] +
-                  m1.m[i][1] * m2.m[1][j] +
-                  m1.m[i][2] * m2.m[2][j] +
-                  m1.m[i][3] * m2.m[3][j];
+          m1.m[i][1] * m2.m[1][j] +
+          m1.m[i][2] * m2.m[2][j] +
+          m1.m[i][3] * m2.m[3][j];
+    }
+  }
+
   return r;
 }
 
