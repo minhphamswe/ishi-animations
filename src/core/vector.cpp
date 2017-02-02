@@ -61,12 +61,17 @@ Vector Vector::operator-() const {
   return Vector(-x, -y, -z);
 }
 
-bool Vector::operator==(const Vector& v) const {
-  return ((x == v.x) && (y == v.y) && (z == v.z));
+bool Vector::operator==(const Vector &v) const {
+  // Difference is less than tiny fraction of the largest number
+  const float eps = 0.001;
+
+  return std::fabs(x - v.x) <= eps * std::max(std::fabs(x), std::fabs(v.x)) &&
+      std::fabs(y - v.y) <= eps * std::max(std::fabs(y), std::fabs(v.y)) &&
+      std::fabs(z - v.z) <= eps * std::max(std::fabs(z), std::fabs(v.z));
 }
 
-bool Vector::operator!=(const Vector& v) const {
-  return ((x != v.x) || (y != v.y) || (z != v.z));
+bool Vector::operator!=(const Vector &v) const {
+  return !(*this == v);
 }
 
 float Vector::operator[](int i) const {
@@ -75,8 +80,7 @@ float Vector::operator[](int i) const {
   return (&x)[i];
 }
 
-std::ostream& operator<< (std::ostream &out, const Vector &v)
-{
+std::ostream &operator<<(std::ostream &out, const Vector &v) {
   out << "v[" << v.x << " " << v.y << " " << v.z << "]";
   return out;
 }
