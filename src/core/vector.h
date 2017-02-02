@@ -1,16 +1,18 @@
 #ifndef CORE_VECTOR_H_
 #define CORE_VECTOR_H_
 
+#include <iostream>
+
 namespace ishi {
 
 class Point;
 
 class Vector {
- public:
+public:
   /// Vector components
   float x, y, z;
 
- public:
+public:
   /// Initialize zero vector
   Vector();
 
@@ -24,35 +26,38 @@ class Vector {
   Vector operator*(float f) const;
 
   /// Multiply with scalar and save to this Vector
-  Vector& operator*=(float f);
+  Vector &operator*=(float f);
 
   /// Add to another Vector and return a new Vector
-  Vector operator+(const Vector& v) const;
+  Vector operator+(const Vector &v) const;
 
   /// Add to another Vector and save to this Vector
-  Vector& operator+=(const Vector& v);
+  Vector &operator+=(const Vector &v);
 
   /// Subtract another Vector and return a new Vector
-  Vector operator-(const Vector& v) const;
+  Vector operator-(const Vector &v) const;
 
   /// Subtract another Vector and save to this Vector
-  Vector& operator-=(const Vector& v);
+  Vector &operator-=(const Vector &v);
 
   /// Return another Vector that is the additive inverse of this vector
   Vector operator-() const;
 
   /// Return true if two Vectors are identical
-  bool operator==(const Vector& v) const;
+  bool operator==(const Vector &v) const;
 
   /// Return true if two Vectors are not identical (in direction or magnitude)
-  bool operator!=(const Vector& v) const;
+  bool operator!=(const Vector &v) const;
 
   /// Get Vector components by integer index
   float operator[](int i) const;
+
+  /// Overload stream output operator
+  friend std::ostream& operator<< (std::ostream &out, const Vector &point);
 };
 
 /// Multiply with a scalar and return new Vector (when scalar comes first)
-Vector operator*(float f, const Vector& v);
+Vector operator*(float f, const Vector &v);
 
 /// Compute the dot product of two vectors
 float Dot(const Vector &v1, const Vector &v2);

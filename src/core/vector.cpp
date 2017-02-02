@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include <core/vector.h>
 #include <core/common.h>
 
@@ -71,6 +73,12 @@ float Vector::operator[](int i) const {
   Assert(i >= 0);
   Assert(i < 3);
   return (&x)[i];
+}
+
+std::ostream& operator<< (std::ostream &out, const Vector &v)
+{
+  out << "v[" << v.x << " " << v.y << " " << v.z << "]";
+  return out;
 }
 
 float Dot(const Vector &v1, const Vector &v2) {
