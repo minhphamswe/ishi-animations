@@ -1,7 +1,8 @@
 #include <iostream>
 
-#include <core/vector.h>
 #include <core/common.h>
+#include <core/math.h>
+#include <core/vector.h>
 
 namespace ishi {
 
@@ -62,12 +63,7 @@ Vector Vector::operator-() const {
 }
 
 bool Vector::operator==(const Vector &v) const {
-  // Difference is less than tiny fraction of the largest number
-  const float eps = 0.001;
-
-  return std::fabs(x - v.x) <= eps * std::max(std::fabs(x), std::fabs(v.x)) &&
-      std::fabs(y - v.y) <= eps * std::max(std::fabs(y), std::fabs(v.y)) &&
-      std::fabs(z - v.z) <= eps * std::max(std::fabs(z), std::fabs(v.z));
+  return feq(x, v.x) && feq(y, v.y) && feq(z, v.z);
 }
 
 bool Vector::operator!=(const Vector &v) const {
