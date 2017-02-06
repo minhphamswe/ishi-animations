@@ -24,6 +24,9 @@ set(SOURCE_FILES
     lib/glew/include/GL/eglew.h
     lib/glew/include/GL/wglew.h
 
+    src/core/math.cpp
+    src/core/math.h
+
     src/core/bbox.cpp
     src/core/bbox.h
     src/core/color.cpp
@@ -76,6 +79,8 @@ target_link_libraries(ishi_animations ${MAIN_LIBRARIES})
 # Build test
 include_directories(lib)
 set(TEST_FILES
+
+    test/math_test.cpp
     test/matrix_test.cpp
     test/point_test.cpp
     test/point_vector_test.cpp
