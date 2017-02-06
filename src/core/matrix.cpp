@@ -1,3 +1,4 @@
+#include <core/math.h>
 #include <core/matrix.h>
 
 namespace ishi {
@@ -122,12 +123,15 @@ Matrix4x4 Inverse(const Matrix4x4 &mat) {
   }
 
   // Perform elementary row operations on the matrix until it reaches
-  // reduced row echelon form
+  // reduced row echelon form.
+  // Reduced row echelon form:
+  // - all rows of all zeroes, if any, are at the bottom of the matrix
+  // - every leading coefficient is 1 and is the only nonzero entry in its column
   for (int i = 0; i < 4; i++) {
     // Make sure the ith value in the ith row is not 0
-    if (matI[i][i] == 0) {
+    if (feq(matI[i][i], 0.0f)) {
       for (int k = i; k < 4; k++) {
-        if (matI[k][i] != 0) {
+        if (!feq(matI[k][i], 0.0f)) {
           swap_row(&matI, i, k);
           break;
         }
@@ -137,7 +141,7 @@ Matrix4x4 Inverse(const Matrix4x4 &mat) {
     // TODO: if matrix is singular, the next statement will divide by 0
 
     // Scale the ith row so the ith value is 1
-    if (matI[i][i] != 1) {
+    if (!feq(matI[i][i], 1.0f)) {
       scale_row(&matI, i, 1 / matI[i][i]);
     }
 
