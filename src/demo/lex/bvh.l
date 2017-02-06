@@ -1,7 +1,7 @@
 %{
 #include <stdio.h>
 #include <iostream>
-#include "bvh_defs.h"
+#include <bvh_defs.h>
 
 using namespace std;
 extern "C" 

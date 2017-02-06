@@ -8,11 +8,11 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake/modules)
 find_package(BISON)
 find_package(FLEX)
 
-BISON_TARGET(MyParser src/bvh.y ${CMAKE_CURRENT_BINARY_DIR}/y.tab.cpp)
-FLEX_TARGET(MyScanner src/bvh.l ${CMAKE_CURRENT_BINARY_DIR}/lex.yy.cpp)
+BISON_TARGET(MyParser src/demo/yacc/bvh.y ${CMAKE_CURRENT_BINARY_DIR}/y.tab.cpp)
+FLEX_TARGET(MyScanner src/demo/lex/bvh.l ${CMAKE_CURRENT_BINARY_DIR}/lex.yy.cpp)
 ADD_FLEX_BISON_DEPENDENCY(MyScanner MyParser)
 
-include_directories(src)
+include_directories(src/main/cpp src/demo/cpp)
 
 add_definitions(-DGLEW_STATIC)
 include_directories(lib/glew/include)
@@ -24,38 +24,38 @@ set(SOURCE_FILES
     lib/glew/include/GL/eglew.h
     lib/glew/include/GL/wglew.h
 
-    src/core/math.cpp
-    src/core/math.h
+    src/main/cpp/core/math.cpp
+    src/main/cpp/core/math.h
 
-    src/core/bbox.cpp
-    src/core/bbox.h
-    src/core/color.cpp
-    src/core/color.h
-    src/core/common.h
-    src/core/point.cpp
-    src/core/point.h
-    src/core/matrix.cpp
-    src/core/matrix.h
-    src/core/vector.cpp
-    src/core/vector.h
-    src/core/transform.cpp
-    src/core/transform.h
+    src/main/cpp/core/bbox.cpp
+    src/main/cpp/core/bbox.h
+    src/main/cpp/core/color.cpp
+    src/main/cpp/core/color.h
+    src/main/cpp/core/common.h
+    src/main/cpp/core/point.cpp
+    src/main/cpp/core/point.h
+    src/main/cpp/core/matrix.cpp
+    src/main/cpp/core/matrix.h
+    src/main/cpp/core/vector.cpp
+    src/main/cpp/core/vector.h
+    src/main/cpp/core/transform.cpp
+    src/main/cpp/core/transform.h
 
-    src/bvh_cb_info.cpp
-    src/bvh_cb_info.h
-    src/bvh_defs.h
-    src/common.h
-    src/geom.h
-    src/joint.cpp
-    src/joint.h
-    src/joint_info.h
-    src/loader.h
-    src/mat.h
-    src/types.h
-    src/vec.h)
+    src/demo/cpp/bvh_cb_info.cpp
+    src/demo/cpp/bvh_cb_info.h
+    src/demo/cpp/bvh_defs.h
+    src/demo/cpp/common.h
+    src/demo/cpp/geom.h
+    src/demo/cpp/joint.cpp
+    src/demo/cpp/joint.h
+    src/demo/cpp/joint_info.h
+    src/demo/cpp/loader.h
+    src/demo/cpp/mat.h
+    src/demo/cpp/types.h
+    src/demo/cpp/vec.h)
 
 add_executable(ishi_animations
-    src/main.cpp
+    src/demo/cpp/main.cpp
     ${SOURCE_FILES}
     ${BISON_MyParser_OUTPUTS}
     ${FLEX_MyScanner_OUTPUTS})
@@ -80,17 +80,17 @@ target_link_libraries(ishi_animations ${MAIN_LIBRARIES})
 include_directories(lib)
 set(TEST_FILES
 
-    test/math_test.cpp
-    test/matrix_test.cpp
-    test/point_test.cpp
-    test/point_vector_test.cpp
-    test/transform_point_test.cpp
-    test/transform_test.cpp
-    test/transform_vector_test.cpp
-    test/vector_test.cpp)
+    src/test/cpp/core/math_test.cpp
+    src/test/cpp/core/matrix_test.cpp
+    src/test/cpp/core/point_test.cpp
+    src/test/cpp/core/point_vector_test.cpp
+    src/test/cpp/core/transform_point_test.cpp
+    src/test/cpp/core/transform_test.cpp
+    src/test/cpp/core/transform_vector_test.cpp
+    src/test/cpp/core/vector_test.cpp)
 
 add_executable(ishi_animations_test
-    test/main.cpp
+    src/test/cpp/main.cpp
     ${SOURCE_FILES}
     ${TEST_FILES})
 
